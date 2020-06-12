@@ -1,152 +1,484 @@
-import {
-  CodeSurfer,
-  CodeSurferColumns,
-  Step,
-} from "code-surfer";
-import { github, vsDark } from "@code-surfer/themes";
+import { CodeSurfer } from "code-surfer";
+import { nightOwl } from "@code-surfer/themes";
 
-export const theme = vsDark;
-
-# Hello 👋
-
-You are using [MDX Deck](https://github.com/jxnblk/mdx-deck) and [Code Surfer](https://codesurfer.pomb.us)
+# Hello
 
 ---
 
-<CodeSurfer>
+## GraphQL Basics
 
-```js title="This is a title" subtitle="and this a subtitle"
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
+<ul>
+  <li>
+    Define the data your server exposes using the GraphQL
+    schema definition language (SDL)
+  </li>
+  <Appear>
+    <li>Write resolvers that implement that schema</li>
+    <li>
+      Issue queries to the server to retrieve data and
+      perform other operations
+    </li>
+  </Appear>
+</ul>
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```graphql 1:5 title="Object Types"
+type Bookmark {
+  id: String!
+  pageId: String!
+  readerId: String!
 }
 
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
-}
-```
-
-```js
-function lorem(ipsum, dolor = 1) {
-  const sit = ipsum == null ? 0 : ipsum.sit;
-  dolor = sit - amet(dolor);
-  return sit
-    ? consectetur(ipsum, 0, dolor < 0 ? 0 : dolor)
-    : [];
-}
-
-function adipiscing(...elit) {
-  if (!elit.sit) {
-    return [];
-  }
-
-  const sed = elit[0];
-  return eiusmod.tempor(sed) ? sed : [sed];
-}
-
-function incididunt(ipsum, ut = 1) {
-  ut = labore.et(amet(ut), 0);
-  const sit = ipsum == null ? 0 : ipsum.sit;
-
-  if (!sit || ut < 1) {
-    return [];
-  }
-
-  let dolore = 0;
-  let magna = 0;
-  const aliqua = new eiusmod(labore.ut(sit / ut));
-
-  while (dolore < sit) {
-    aliqua[magna++] = consectetur(
-      ipsum,
-      dolore,
-      (dolore += ut)
-    );
-  }
-
-  return aliqua;
+type Page {
+  id: String!
+  bookmarkCount: Int!
+  description: String!
+  imgUrl: String!
+  title: String!
+  url: String!
+  rating: Float
+  aliases: [String!]
+  isGreat: Boolean
 }
 ```
 
-```diff 1[10:14],2[15:19],3[22:27],10:12
+```graphql 7:17 title="Object Types"
+type Bookmark {
+  id: String!
+  pageId: String!
+  readerId: String!
+}
 
+type Page {
+  id: String!
+  bookmarkCount: Int!
+  description: String!
+  imgUrl: String!
+  title: String!
+  url: String!
+  rating: Float
+  aliases: [String!]
+  isGreat: Boolean
+}
 ```
 
 </CodeSurfer>
 
 ---
 
-<CodeSurferColumns themes={[vsDark, github]}>
+<CodeSurfer theme={nightOwl}>
 
-<Step>
-
-```js
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
+```graphql title="Query type"
+type Query {
+  bookmark(id: String!): Bookmark!
+}
 ```
 
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
+```graphql title="Query type"
+type Query {
+  bookmark(id: String!): Bookmark!
+  bookmarks(first: Int!, after: String!): [Bookmark!]!
+}
 ```
 
-</Step>
-
-<Step>
-
-```js
-const lorem = (ipsum, dolor, sit) => {
-  const amet = dolor - ipsum;
-  return consectetur.adipiscing(
-    {
-      elit: sed.eiusmod(sit - dolor) / amet + 2,
-    },
-    (tempor, incididunt) => ipsum + amet * incididunt
-  );
-};
-
-const magna = aliqua => aliqua.ut((enim, ad) => enim, 0);
+```graphql title="Query type"
+type Query {
+  bookmark(id: String!): Bookmark!
+  bookmarks(first: Int!, after: String!): [Bookmark!]!
+  page(input: PageWhereUniqueInput!): Page!
+}
 ```
 
-```js
-const minim = (ad, enim) => dolore.magna(ad / enim);
+```graphql title="Query type"
+type Query {
+  bookmark(id: String!): Bookmark!
+  bookmarks(first: Int!, after: String!): [Bookmark!]!
+  page(input: PageWhereUniqueInput!): Page!
+}
 
-const sed = (eiusmod, tempor, incididunt) => {
-  const ut = tempor - eiusmod;
-  return labore.et(
-    {
-      amet: dolore.magna(incididunt - tempor) / ut + 2,
-    },
-    (aliqua, elit) => eiusmod + ut * elit
-  );
-};
+input PageWhereUniqueInput {
+  id: String
+  url: String
+}
 ```
 
-</Step>
-
-</CodeSurferColumns>
+</CodeSurfer>
 
 ---
 
-docs:  
-[codesurfer.pomb.us](https://codesurfer.pomb.us)
+<CodeSurfer theme={nightOwl}>
+
+```graphql title="Mutation type"
+type Mutation {
+  createPage(input: CreatePageInput!): Page
+  createBookmark(input: CreateBookmarkInput!): Bookmark
+}
+```
+
+```graphql title="Mutation type"
+type Mutation {
+  createPage(input: CreatePageInput!): Page
+  createBookmark(input: CreateBookmarkInput!): Bookmark
+}
+
+input CreatePageInput {
+  url: String!
+}
+
+input CreateBookmarkInput {
+  pageId: String!
+  readerId: String!
+}
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```graphql subtitle="Fields on a custom type can also have arguments and reference other custom types"
+type Bookmark {
+  id: String!
+  pageId: String!
+  readerId: String!
+}
+
+type Page {
+  id: String!
+  bookmarkCount: Int!
+  description: String!
+  imgUrl: String!
+  title: String!
+  url: String!
+  rating: Float
+  aliases: [String!]
+  isGreat: Boolean
+}
+```
+
+```graphql subtitle="Fields on a custom type can also have arguments and reference other custom types"
+type Bookmark {
+  id: String!
+  pageId: String!
+  page: Page!
+  readerId: String!
+  reader: Reader!
+}
+
+type Page {
+  id: String!
+  bookmarkCount: Int!
+  description: String!
+  imgUrl: String!
+  title: String!
+  url: String!
+  rating: Float
+  aliases: [String!]
+  isGreat: Boolean
+  bookmarks(first: Int!, after: String!): [Bookmark!]!
+}
+```
+
+</CodeSurfer>
+
+---
+
+## Implementing the schema with resolvers
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```js title="Query Resolver"
+const resolvers = {
+  Query: {
+    bookmark(root, args, context) {
+      // Return promise resolve to a bookmark object somehow
+    },
+  },
+};
+```
+
+```js title="Query Resolver" subtitle="Resolve data with database client"
+const resolvers = {
+  Query: {
+    bookmark(root, args, context) {
+      return context.db.getBookmarkById(args.id);
+    },
+  },
+};
+```
+
+```js title="Query Resolver" subtitle="Resolve data with REST API"
+const resolvers = {
+  Query: {
+    bookmark(root, args, context) {
+      return axios.get(
+        `https://rest-api.mediavine.com/bookmarks/${args.id}`
+      );
+    },
+  },
+};
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```js title="Custom Type Resolver"
+const resolvers = {
+  Bookmark: {
+    id(root, args, context) {
+      return root.id; // Default resolver
+    },
+  },
+};
+```
+
+```js title="Custom Type Resolver"
+const resolvers = {
+  Bookmark: {
+    page(root, args, context) {
+      return context.db.getPageById(root.pageId);
+    },
+    reader(root, args, context) {
+      return context.db.getReaderById(root.readerId);
+    },
+  },
+};
+```
+
+</CodeSurfer>
+
+---
+
+## Sending queries to the server
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```graphql
+query GetBookmark {
+  bookmark(id: "37770f22-27c2-4bc2-80e7-e19869035704") {
+    id
+    page {
+      id
+      url
+      title
+    }
+  }
+}
+```
+
+```graphql 1
+query GetBookmark {
+  bookmark(id: "37770f22-27c2-4bc2-80e7-e19869035704") {
+    id
+    page {
+      id
+      url
+      title
+    }
+  }
+}
+```
+
+```graphql 2
+query GetBookmark {
+  bookmark(id: "37770f22-27c2-4bc2-80e7-e19869035704") {
+    id
+    page {
+      id
+      url
+      title
+    }
+  }
+}
+```
+
+```graphql 3:9
+query GetBookmark {
+  bookmark(id: "37770f22-27c2-4bc2-80e7-e19869035704") {
+    id
+    page {
+      id
+      url
+      title
+    }
+  }
+}
+```
+
+```json 1:8
+"bookmark": {
+  "id": "37770f22-27c2-4bc2-80e7-e19869035704",
+  "page": {
+    "id": "efa362ff-5c01-4c6d-a4ff-b7a777921eb3",
+    "url": "https://mediavine.com/about",
+    "title": "About Mediavine"
+  }
+}
+```
+
+```graphql
+mutation CreateBookmark {
+  createBookmark(
+    input: {
+      readerId: "b0dad10a-fa95-4f2d-9233-138c11de6fe7"
+      pageId: "efa362ff-5c01-4c6d-a4ff-b7a777921eb3"
+    }
+  ) {
+    id
+    page {
+      id
+      url
+      title
+    }
+  }
+}
+```
+
+```json 1:8
+"bookmark": {
+  "id": "37770f22-27c2-4bc2-80e7-e19869035704",
+  "page": {
+    "id": "efa362ff-5c01-4c6d-a4ff-b7a777921eb3",
+    "url": "https://mediavine.com/about",
+    "title": "About Mediavine"
+  }
+}
+```
+
+</CodeSurfer>
+
+---
+
+## Advantages
+
+<ul>
+  <li>Clients can request just the data they need</li>
+  <Appear>
+    <li>
+      Being able to query relations reduces number of round
+      trips necessary
+    </li>
+    <li>
+      Automatically validates inputs and outputs using types
+      defined in the schema
+    </li>
+    <li>
+      Schema makes it easy to see what data is available
+    </li>
+    <li>
+      Easy to generate docs and typesafe clients with
+      intellisence from schema
+    </li>
+    <li>
+      Clients have normalized caching mechanisms built-in
+    </li>
+  </Appear>
+</ul>
+
+---
+
+## Difficulties
+
+<ul>
+  <li>n+1 Query Problem</li>
+  <Appear>
+    <li>Need to protect against expensive queries</li>
+    <li>Browser/CDN Caching more difficult</li>
+    <li>
+      Harder to write a curl request for simple operations
+      compared to a REST API
+    </li>
+    <li>
+      Most GraphQL clients ship with the GraphQL parser and
+      printer, which is a bit heavy
+    </li>
+  </Appear>
+</ul>
+
+---
+
+## GraphQL Servers
+
+<ul>
+  <li>express-graphql</li>
+  <Appear>
+    <li>Apollo</li>
+    <li>graphql-yoga/nexus</li>
+    <li>Ruby, Go, Python, Rust, Clojure, php, etc</li>
+  </Appear>
+</ul>
+
+---
+
+## GraphQL Clients
+
+<ul>
+  <li>Apollo</li>
+  <Appear>
+    <li>Relay</li>
+    <li>Urql</li>
+    <li>graphql-request</li>
+  </Appear>
+</ul>
+
+---
+
+## TypeScript Generation
+
+<video controls>
+  <source src="https://i.imgur.com/WMCf46u.mp4" />
+</video>
+
+---
+
+<CodeSurfer theme={nightOwl} title="Server Type Safety with Generated Types">
+
+```js
+const resolvers: Resolvers = {
+  Query: {
+    bookmark(root, args, context) {
+      return axios.get(
+        `https://rest-api.mediavine.com/bookmarks/${args.id}`
+      );
+    },
+  },
+};
+```
+
+</CodeSurfer>
+
+---
+
+<CodeSurfer theme={nightOwl}>
+
+```js title="Generating schema using @schema/nexus and prisma"
+export const Bookmark = objectType({
+  name: "Bookmark",
+  definition(t) {
+    t.model.id();
+    t.model.createdAt();
+    t.model.updatedAt();
+    t.model.pageId();
+    t.model.readerId();
+    t.model.page();
+    t.model.reader();
+  },
+});
+```
+
+</CodeSurfer>
+
+---
+
+## The End
